@@ -1,40 +1,55 @@
 import 'package:flutter/foundation.dart';
+import 'package:things/core/response_status.dart';
 import 'package:things/services/firebase_auth_service.dart';
 import 'package:things/services/local_storage_service.dart';
 
 class AuthViewModel with ChangeNotifier {
   final FirebaseAuthService _firebaseAuthService = FirebaseAuthService();
   final LocalStorageService _localAuthStatusService = LocalStorageService();
+  ResponseStatus responseStatus = ResponseStatus.none();
 
-  void signIn(String userEmail, String userPassword) async {
-    await _firebaseAuthService.signInUserWithEmailAndPassword(
+  Future<bool> signIn(String userEmail, String userPassword) async {
+    responseStatus = ResponseStatus.loading();
+    notifyListeners();
+    responseStatus = await _firebaseAuthService.signInUserWithEmailAndPassword(
       userEmail,
       userPassword,
     );
-    _localAuthStatusService.authenticateUser();
+    if (responseStatus.status == Status.completed) {
+      _localAuthStatusService.authenticateUser();
+      notifyListeners();
+      return true;
+    }
     notifyListeners();
+    return false;
   }
 
-  void signUp(String userEmail, String userPassword) async {
-    await _firebaseAuthService.createUserWithEmailAndPassword(
+  Future<bool> signUp(String userEmail, String userPassword) async {
+    responseStatus = ResponseStatus.loading();
+    notifyListeners();
+    responseStatus = await _firebaseAuthService.createUserWithEmailAndPassword(
       userEmail,
       userPassword,
     );
-    _localAuthStatusService.authenticateUser();
+    if (responseStatus.status == Status.completed) {
+      _localAuthStatusService.authenticateUser();
+      notifyListeners();
+      return true;
+    }
     notifyListeners();
+    return false;
   }
 
-  void signOut() async {
-    await _firebaseAuthService.logOut();
-    _localAuthStatusService.unAuthenticateUser();
-  }
-
-  void addUserName(String newUserName) async {
-    await _firebaseAuthService.addUserName(newUserName);
+  Future<bool> signOut() async {
+    responseStatus = ResponseStatus.loading();
     notifyListeners();
-  }
-
-  String getUserName() {
-    return _firebaseAuthService.username();
+    responseStatus = await _firebaseAuthService.logOut();
+    if (responseStatus.status == Status.completed) {
+      _localAuthStatusService.unAuthenticateUser();
+      notifyListeners();
+      return true;
+    }
+    notifyListeners();
+    return false;
   }
 }

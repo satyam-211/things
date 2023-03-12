@@ -1,57 +1,99 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:things/constants/constants.dart';
+import 'package:things/core/response_status.dart';
 import 'package:things/models/thing.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? firebaseUser = FirebaseAuth.instance.currentUser;
 
-  Future<void> addThing(Thing newThing) async {
-    final thingMap = newThing.toMap();
-    thingMap.addAll(Constants.kIsThingDone);
-    await _firestore
-        .collection(Constants.kUsers)
-        .doc(firebaseUser!.uid)
-        .collection(Constants.kThings)
-        .doc(newThing.id)
-        .set(thingMap);
+  Future<ResponseStatus> addThing(Thing newThing,
+      [bool isCompleted = false]) async {
+    try {
+      await _firestore
+          .collection(Constants.kUsers)
+          .doc(firebaseUser!.uid)
+          .collection(
+            isCompleted
+                ? Constants.kCompletedThings
+                : Constants.kIncompleteThings,
+          )
+          .doc(newThing.id)
+          .set(newThing.toMap());
+      return ResponseStatus.completed();
+    } on FirebaseException catch (exception) {
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
+    }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getThings() async {
-    return await _firestore
-        .collection(Constants.kUsers)
-        .doc(firebaseUser!.uid)
-        .collection(Constants.kThings)
-        .get();
+  Future<ResponseStatus<QuerySnapshot<Map<String, dynamic>>>> getThings(
+      [bool completed = false]) async {
+    try {
+      final data = await _firestore
+          .collection(Constants.kUsers)
+          .doc(firebaseUser!.uid)
+          .collection(
+            completed
+                ? Constants.kCompletedThings
+                : Constants.kIncompleteThings,
+          )
+          .get();
+      return ResponseStatus.completed(data);
+    } on FirebaseException catch (exception) {
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
+    }
   }
 
-  Future<void> deleteThing(String thingID) async {
-    await _firestore
-        .collection(Constants.kUsers)
-        .doc(firebaseUser!.uid)
-        .collection(Constants.kThings)
-        .doc(thingID)
-        .delete();
+  Future<ResponseStatus> deleteThing(String thingID) async {
+    try {
+      await _firestore
+          .collection(Constants.kUsers)
+          .doc(firebaseUser!.uid)
+          .collection(Constants.kIncompleteThings)
+          .doc(thingID)
+          .delete();
+      return ResponseStatus.completed();
+    } on FirebaseException catch (exception) {
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
+    }
   }
 
-  Future<void> updateThingIsDone(String thingID, bool newIsDone) async {
-    await _firestore
-        .collection(Constants.kUsers)
-        .doc(firebaseUser!.uid)
-        .collection(Constants.kThings)
-        .doc(thingID)
-        .update({
-      "isDone": newIsDone,
-    });
+  Future<ResponseStatus> updateThingIsDone(
+    Thing thing,
+  ) async {
+    try {
+      addThing(thing, true);
+      deleteThing(thing.id!);
+      return ResponseStatus.completed();
+    } on FirebaseException catch (exception) {
+      return ResponseStatus.error(
+        exception.message ?? Constants.kError,
+      );
+    } catch (e) {
+      return ResponseStatus.error();
+    }
   }
 
-  Future<void> updateThing(String thingId, Thing newThing) async {
-    await _firestore
-        .collection(Constants.kUsers)
-        .doc(firebaseUser!.uid)
-        .collection(Constants.kThings)
-        .doc(thingId)
-        .update(newThing.toMap());
+  Future<ResponseStatus> updateThing(String thingId, Thing newThing) async {
+    try {
+      await _firestore
+          .collection(Constants.kUsers)
+          .doc(firebaseUser!.uid)
+          .collection(Constants.kIncompleteThings)
+          .doc(thingId)
+          .update(newThing.toMap());
+      return ResponseStatus.completed();
+    } on FirebaseException catch (exception) {
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
+    }
   }
 }

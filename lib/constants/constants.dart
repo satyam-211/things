@@ -1,5 +1,6 @@
 class Constants {
-  static const String kUsers = "users";
-  static const String kThings = "things";
-  static const Map<String, bool> kIsThingDone = {"isDone": false};
+  static const kUsers = "users";
+  static const kCompletedThings = "completedThings";
+  static const kIncompleteThings = "incompleteThings";
+  static const kError = "Something went wrong";
 }

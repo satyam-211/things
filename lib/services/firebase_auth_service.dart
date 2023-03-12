@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:things/core/response_status.dart';
+
+import 'package:things/constants/constants.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<void> createUserWithEmailAndPassword(
+  Future<ResponseStatus> createUserWithEmailAndPassword(
     String userEmail,
     String userPassword,
   ) async {
@@ -13,12 +16,16 @@ class FirebaseAuthService {
         email: userEmail,
         password: userPassword,
       );
+      return ResponseStatus.completed();
     } on FirebaseAuthException catch (exception) {
       debugPrint(exception.message);
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
     }
   }
 
-  Future<void> signInUserWithEmailAndPassword(
+  Future<ResponseStatus> signInUserWithEmailAndPassword(
     String userEmail,
     String userPassword,
   ) async {
@@ -27,24 +34,22 @@ class FirebaseAuthService {
         email: userEmail.trim(),
         password: userPassword,
       );
+      return ResponseStatus.completed();
     } on FirebaseAuthException catch (exception) {
       debugPrint(exception.message);
+      return ResponseStatus.error(exception.message ?? Constants.kError);
+    } catch (e) {
+      return ResponseStatus.error();
     }
   }
 
-  Future<void> logOut() async {
+  Future<ResponseStatus> logOut() async {
     try {
       await _firebaseAuth.signOut();
+      return ResponseStatus.completed();
     } catch (e) {
       debugPrint(e.toString());
+      return ResponseStatus.error(e.toString());
     }
-  }
-
-  Future<void> addUserName(String newUserName) async {
-    await _firebaseAuth.currentUser!.updateDisplayName(newUserName);
-  }
-
-  String username() {
-    return _firebaseAuth.currentUser!.displayName!;
   }
 }

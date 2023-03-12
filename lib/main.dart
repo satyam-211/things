@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:things/core/thing_app_theme.dart';
+import 'package:things/core/router.dart';
 import 'package:things/viewmodels/auth_view_model.dart';
 import 'package:things/viewmodels/local_storage_view_model.dart';
 import 'package:things/viewmodels/things_view_model.dart';
-import 'package:things/views/auth_view.dart';
-import 'package:things/views/things_view.dart';
+import 'package:things/views/auth/auth_view.dart';
+import 'package:things/views/things/things_view.dart';
 import 'package:things/views/welcome_view.dart';
 
 void main() async {
@@ -37,21 +39,22 @@ class Things extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Things',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThingAppTheme.theme,
+      onGenerateRoute: generateRoute,
       home: Consumer<LocalStorageViewModel>(
         builder: (context, localStorage, _) => FutureBuilder<bool?>(
             future: localStorage.getUserAuthenticationStatus(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.none ||
-                  snapshot.connectionState == ConnectionState.waiting) {
+                  snapshot.connectionState == ConnectionState.waiting ||
+                  !snapshot.hasData) {
                 return const WelcomeView();
               }
-              if (!snapshot.hasData || snapshot.data == null) {
-                return const AuthView();
+              final isAuthenticated = snapshot.data ?? false;
+              if (isAuthenticated) {
+                return const ThingsView();
               }
-              return const ThingsView();
+              return const AuthView();
             }),
       ),
     );
