@@ -81,10 +81,7 @@ class _ThingsViewState extends State<ThingsView> {
                                       ThingsConstants.kHeading,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .displayLarge
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                          ),
+                                          .displayLarge,
                                     ),
                                     Text(
                                       Utils.toReadableDate(
@@ -92,10 +89,7 @@ class _ThingsViewState extends State<ThingsView> {
                                       ),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                          ),
+                                          .bodyMedium,
                                     )
                                   ],
                                 ),
@@ -250,6 +244,9 @@ class _ThingsViewState extends State<ThingsView> {
                         Utils.toReadableDate(
                           myThing.time ?? DateTime.now(),
                         ),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.black,
+                            ),
                       ),
                     );
                   },

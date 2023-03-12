@@ -88,6 +88,9 @@ class _DismissableThingItemState extends State<DismissableThingItem> {
           Utils.toReadableTime(
             widget.myThing.time ?? DateTime.now(),
           ),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Colors.black,
+              ),
         ),
       ),
     );
