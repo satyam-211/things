@@ -69,70 +69,74 @@ class _AddThingViewState extends State<AddThingView> {
       backgroundColor: Colors.blueAccent,
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Align(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Align(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white,
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.list_alt,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.list_alt,
-                      color: Colors.white,
-                    ),
+                ),
+                ThingDropdown(
+                  onChanged: (thingTypeSelected) =>
+                      thingType = thingTypeSelected,
+                  selectedValue: thing.type,
+                ),
+                ThingTextField(
+                  textFieldModel: TextFieldModel(
+                    placeHolder: ThingsConstants.kDescription,
+                    textEditingController: _descriptionController,
+                    focusNode: FocusNode(),
+                    validator: null,
                   ),
                 ),
-              ),
-              ThingDropdown(
-                onChanged: (thingTypeSelected) => thingType = thingTypeSelected,
-                selectedValue: thing.type,
-              ),
-              ThingTextField(
-                textFieldModel: TextFieldModel(
-                  placeHolder: ThingsConstants.kDescription,
-                  textEditingController: _descriptionController,
-                  focusNode: FocusNode(),
-                  validator: null,
+                ThingTextField(
+                  textFieldModel: TextFieldModel(
+                    placeHolder: ThingsConstants.kPlace,
+                    textEditingController: _placeController,
+                    focusNode: FocusNode(),
+                    validator: null,
+                  ),
                 ),
-              ),
-              ThingTextField(
-                textFieldModel: TextFieldModel(
-                  placeHolder: ThingsConstants.kPlace,
-                  textEditingController: _placeController,
-                  focusNode: FocusNode(),
-                  validator: null,
+                ThingDatePicker(
+                  placeholderText: ThingsConstants.kTime,
+                  value: editMode
+                      ? Utils.toReadableDateAndTime(thing.time!)
+                      : null,
+                  onSelect: (dateSelected) => time = dateSelected,
                 ),
-              ),
-              ThingDatePicker(
-                placeholderText: ThingsConstants.kTime,
-                value:
-                    editMode ? Utils.toReadableDateAndTime(thing.time!) : null,
-                onSelect: (dateSelected) => time = dateSelected,
-              ),
-              ThingDatePicker(
-                placeholderText: ThingsConstants.kNotification,
-                value: editMode
-                    ? Utils.toReadableDateAndTime(thing.notification!)
-                    : null,
-                onSelect: (dateSelected) => notification = dateSelected,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ThingButton(
-                onPressed: _addThing,
-                text: editMode
-                    ? ThingsConstants.kEditYourThing
-                    : ThingsConstants.kAddNewThing,
-              ),
-            ],
+                ThingDatePicker(
+                  placeholderText: ThingsConstants.kNotification,
+                  value: editMode
+                      ? Utils.toReadableDateAndTime(thing.notification!)
+                      : null,
+                  onSelect: (dateSelected) => notification = dateSelected,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ThingButton(
+                  onPressed: _addThing,
+                  text: editMode
+                      ? ThingsConstants.kEditYourThing
+                      : ThingsConstants.kAddNewThing,
+                ),
+              ],
+            ),
           ),
         ),
       ),

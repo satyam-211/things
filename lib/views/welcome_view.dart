@@ -7,10 +7,22 @@ class WelcomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
-      body: Center(
-        child: Column(
-          children: const [Text('Things'), Text('Let\'s do some thing')],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(
+            child: Text(
+              'Things',
+              style: Theme.of(context).textTheme.displayLarge,
+            ),
+          ),
+          Align(
+            child: Text(
+              'Let\'s do some thing',
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+          ),
+        ],
       ),
     );
   }
