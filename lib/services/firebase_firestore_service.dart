@@ -26,7 +26,7 @@ class FirebaseFirestoreService {
     } on FirebaseException catch (exception) {
       return ResponseStatus.error(exception.message ?? Constants.kError);
     } catch (e) {
-      return ResponseStatus.error();
+      return ResponseStatus.error(e.toString());
     }
   }
 
@@ -47,7 +47,7 @@ class FirebaseFirestoreService {
     } on FirebaseException catch (exception) {
       return ResponseStatus.error(exception.message ?? Constants.kError);
     } catch (e) {
-      return ResponseStatus.error();
+      return ResponseStatus.error(e.toString());
     }
   }
 
@@ -64,7 +64,7 @@ class FirebaseFirestoreService {
     } on FirebaseException catch (exception) {
       return ResponseStatus.error(exception.message ?? Constants.kError);
     } catch (e) {
-      return ResponseStatus.error();
+      return ResponseStatus.error(e.toString());
     }
   }
 
@@ -80,7 +80,7 @@ class FirebaseFirestoreService {
         exception.message ?? Constants.kError,
       );
     } catch (e) {
-      return ResponseStatus.error();
+      return ResponseStatus.error(e.toString());
     }
   }
 
@@ -97,7 +97,7 @@ class FirebaseFirestoreService {
     } on FirebaseException catch (exception) {
       return ResponseStatus.error(exception.message ?? Constants.kError);
     } catch (e) {
-      return ResponseStatus.error();
+      return ResponseStatus.error(e.toString());
     }
   }
 }

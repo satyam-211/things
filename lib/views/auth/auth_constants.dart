@@ -5,4 +5,6 @@ class AuthConstants {
   static const kSignIn = 'Sign In';
   static const kSignUp = 'Sign Up';
   static const kThings = 'Things';
+  static const kGoogleSignIn = 'Sign in with Google';
+  static const kOr = 'Or';
 }

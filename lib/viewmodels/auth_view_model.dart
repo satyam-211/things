@@ -24,6 +24,19 @@ class AuthViewModel with ChangeNotifier {
     return false;
   }
 
+  Future<bool> googleSignIn() async {
+    responseStatus = ResponseStatus.loading();
+    notifyListeners();
+    responseStatus = await _firebaseAuthService.googleSignIn();
+    if (responseStatus.status == Status.completed) {
+      _localAuthStatusService.authenticateUser();
+      notifyListeners();
+      return true;
+    }
+    notifyListeners();
+    return false;
+  }
+
   Future<bool> signUp(String userEmail, String userPassword) async {
     responseStatus = ResponseStatus.loading();
     notifyListeners();
