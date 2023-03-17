@@ -45,8 +45,7 @@ class Things extends StatelessWidget {
         builder: (context, localStorage, _) => FutureBuilder<bool?>(
             future: localStorage.getUserAuthenticationStatus(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.none ||
-                  snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState != ConnectionState.done) {
                 return const WelcomeView();
               }
               final isAuthenticated = snapshot.data ?? false;

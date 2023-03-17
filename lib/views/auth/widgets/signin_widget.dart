@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:things/constants/constants.dart';
 import 'package:things/core/routes_constants.dart';
 import 'package:things/core/text_field_model.dart';
 import 'package:things/utils/utils.dart';
@@ -45,7 +46,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                   focusNode: FocusNode(),
                   textEditingController: _emailController,
                   placeHolder: AuthConstants.kEmail,
-                  validator: null,
+                  validator: (val) =>
+                      (val?.isEmpty ?? true) ? Constants.kFieldError : null,
                 ),
               ),
               ThingTextField(
@@ -53,7 +55,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                   focusNode: FocusNode(),
                   textEditingController: _passwordController,
                   placeHolder: AuthConstants.kPassword,
-                  validator: null,
+                  validator: (val) =>
+                      (val?.isEmpty ?? true) ? Constants.kFieldError : null,
                   obscureText: true,
                 ),
               ),

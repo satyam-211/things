@@ -6,11 +6,12 @@ import 'package:things/models/thing.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final User? firebaseUser = FirebaseAuth.instance.currentUser;
+  User? firebaseUser;
 
   Future<ResponseStatus> addThing(Thing newThing,
       [bool isCompleted = false]) async {
     try {
+      firebaseUser = FirebaseAuth.instance.currentUser;
       await _firestore
           .collection(Constants.kUsers)
           .doc(firebaseUser!.uid)
@@ -32,6 +33,7 @@ class FirebaseFirestoreService {
   Future<ResponseStatus<QuerySnapshot<Map<String, dynamic>>>> getThings(
       [bool completed = false]) async {
     try {
+      firebaseUser = FirebaseAuth.instance.currentUser;
       final data = await _firestore
           .collection(Constants.kUsers)
           .doc(firebaseUser!.uid)
@@ -51,6 +53,7 @@ class FirebaseFirestoreService {
 
   Future<ResponseStatus> deleteThing(String thingID) async {
     try {
+      firebaseUser = FirebaseAuth.instance.currentUser;
       await _firestore
           .collection(Constants.kUsers)
           .doc(firebaseUser!.uid)
@@ -83,6 +86,7 @@ class FirebaseFirestoreService {
 
   Future<ResponseStatus> updateThing(String thingId, Thing newThing) async {
     try {
+      firebaseUser = FirebaseAuth.instance.currentUser;
       await _firestore
           .collection(Constants.kUsers)
           .doc(firebaseUser!.uid)

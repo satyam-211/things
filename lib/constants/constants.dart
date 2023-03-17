@@ -3,4 +3,5 @@ class Constants {
   static const kCompletedThings = "completedThings";
   static const kIncompleteThings = "incompleteThings";
   static const kError = "Something went wrong";
+  static const kFieldError = "This field cannot be empty";
 }

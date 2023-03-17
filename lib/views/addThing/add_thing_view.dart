@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:things/constants/constants.dart';
 import 'package:things/core/response_status.dart';
 import 'package:things/core/text_field_model.dart';
 import 'package:things/models/thing.dart';
@@ -101,7 +102,8 @@ class _AddThingViewState extends State<AddThingView> {
                     placeHolder: ThingsConstants.kDescription,
                     textEditingController: _descriptionController,
                     focusNode: FocusNode(),
-                    validator: null,
+                    validator: (val) =>
+                        (val?.isEmpty ?? true) ? Constants.kFieldError : null,
                   ),
                 ),
                 ThingTextField(
@@ -109,7 +111,8 @@ class _AddThingViewState extends State<AddThingView> {
                     placeHolder: ThingsConstants.kPlace,
                     textEditingController: _placeController,
                     focusNode: FocusNode(),
-                    validator: null,
+                    validator: (val) =>
+                        (val?.isEmpty ?? true) ? Constants.kFieldError : null,
                   ),
                 ),
                 ThingDatePicker(
