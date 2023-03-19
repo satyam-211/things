@@ -14,5 +14,6 @@ class ThingsConstants {
   static const kNotification = 'Notification';
   static const kAddYourThing = 'ADD YOUR THING';
   static const kLogout = 'Logout';
+  static const kDone = 'Done';
   static const bgImagePath = 'assets/images/bg_image.jpg';
 }

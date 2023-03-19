@@ -136,15 +136,49 @@ class _ThingsViewState extends State<ThingsView> {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    '${_thingViewModel.completedThings.length} Done',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Colors.white,
+                                  Builder(builder: (context) {
+                                    final percentageCompleted =
+                                        _calculatePercentage();
+                                    final percentageStr =
+                                        percentageCompleted % 10 == 0
+                                            ? percentageCompleted
+                                                .toStringAsFixed(0)
+                                            : '$percentageCompleted';
+                                    return Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            height: 15,
+                                            width: 15,
+                                            child: CircularProgressIndicator(
+                                              value: percentageCompleted / 100,
+                                              backgroundColor: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
                                         ),
-                                  ),
+                                        Text(
+                                          '$percentageStr% ',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Colors.white,
+                                              ),
+                                        ),
+                                        Text(
+                                          ThingsConstants.kDone,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Colors.white,
+                                              ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
                                 ],
                               )
                             ],
@@ -263,6 +297,23 @@ class _ThingsViewState extends State<ThingsView> {
         ),
       ),
     );
+  }
+
+  double _calculatePercentage() {
+    final completedThings = _thingViewModel.completedThings.length;
+    final incompletedThings = _thingViewModel.incompleteThings.length;
+    if (incompletedThings == 0 && completedThings == 0) {
+      return 0;
+    } else if (completedThings != 0 && incompletedThings == 0) {
+      return 100;
+    } else {
+      final percentageCompleted =
+          ((completedThings / (incompletedThings + completedThings)) * 100);
+      final returnString = (percentageCompleted % 10) == 0
+          ? percentageCompleted
+          : double.parse(percentageCompleted.toStringAsFixed(2));
+      return returnString;
+    }
   }
 
   void navigateToAddThing([Thing? thing]) {

@@ -16,11 +16,14 @@ class ThingDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<ThingType>(
+      elevation: 2,
       items: ThingType.values
           .map(
             (type) => DropdownMenuItem<ThingType>(
               value: type,
-              child: Text(type.name),
+              child: Text(
+                type.name.toUpperCase(),
+              ),
             ),
           )
           .toList(),
@@ -41,7 +44,7 @@ class ThingDropdown extends StatelessWidget {
         ),
       ),
       style: Theme.of(context).textTheme.bodyLarge,
-      dropdownColor: Colors.blueAccent,
+      dropdownColor: Colors.black87,
       iconEnabledColor: Colors.white,
       onChanged: onChanged,
       value: selectedValue,
